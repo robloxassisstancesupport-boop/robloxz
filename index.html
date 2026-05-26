@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Revert Account</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+}
+
+/* NAV */
+
+.nav{
+height:48px;
+background:#f8f8f8;
+border-bottom:1px solid #d4d4d4;
+display:flex;
+align-items:center;
+padding:0 12px;
+}
+
+.logo{
+width:32px;
+height:32px;
+display:flex;
+align-items:center;
+justify-content:center;
+margin-right:20px;
+flex-shrink:0;
+}
+
+.logo img{
+width:28px;
+height:28px;
+display:block;
+object-fit:contain;
+}
+
+.nav a{
+text-decoration:none;
+color:#222;
+font-size:15px;
+margin-right:40px;
+}
+
+.searchWrap{
+flex:1;
+display:flex;
+justify-content:center;
+}
+
+.search{
+width:420px;
+height:30px;
+padding-left:12px;
+border:1px solid #ccc;
+border-radius:4px;
+outline:none;
+background:white;
+}
+
+.right{
+display:flex;
+margin-left:20px;
+}
+
+.signup{
+height:32px;
+padding:0 15px;
+border:none;
+background:#3366ff;
+color:white;
+border-radius:4px;
+cursor:pointer;
+}
+
+.login{
+height:32px;
+padding:0 15px;
+margin-left:8px;
+background:white;
+border:1px solid #ccc;
+border-radius:4px;
+cursor:pointer;
+}
+
+/* MAIN */
+
+.center{
+display:flex;
+justify-content:center;
+margin-top:50px;
+}
+
+.card{
+width:440px;
+background:#ececec;
+padding:18px;
+}
+
+.title{
+font-size:34px;
+font-weight:700;
+text-align:center;
+margin-bottom:20px;
+}
+
+.text{
+font-size:16px;
+line-height:1.5;
+margin-bottom:15px;
+}
+
+.profile{
+display:none;
+text-align:center;
+margin-bottom:15px;
+}
+
+.profile img{
+width:70px;
+height:70px;
+border-radius:50%;
+margin-bottom:10px;
+}
+
+.warning{
+padding:8px;
+background:white;
+border:1px solid black;
+font-weight:bold;
+font-size:14px;
+}
+
+.input{
+width:100%;
+height:40px;
+margin-top:15px;
+padding-left:12px;
+border:1px solid #ccc;
+border-radius:4px;
+background:#f7f7f7;
+}
+
+.submit{
+width:100%;
+height:40px;
+margin-top:15px;
+border:1px solid #aaa;
+border-radius:4px;
+background:#efefef;
+color:#888;
+cursor:pointer;
+}
+
+.footer{
+margin-top:150px;
+text-align:center;
+font-size:14px;
+color:#555;
+}
+
+.footer span{
+margin:0 10px;
+}
+
+.bottom{
+margin-top:35px;
+padding-top:30px;
+border-top:1px solid #d0d0d0;
+text-align:center;
+font-size:11px;
+color:#666;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+
+<div class="logo">
+<img src="PASTE_YOUR_SINGLE_BASE64_STRING_HERE">
+</div>
+
+<a href="#">Charts</a>
+<a href="#">Marketplace</a>
+<a href="#">Create</a>
+<a href="#">Robux</a>
+
+<div class="searchWrap">
+<input class="search" placeholder="Search">
+</div>
+
+<div class="right">
+<button class="signup">Sign Up</button>
+<button class="login">Log In</button>
+</div>
+
+</div>
+
+
+<div class="center">
+
+<div class="card">
+
+<div class="title">
+Revert Account
+</div>
+
+<div class="text">
+You are about to revert your account to a past state.<br>
+Enter a Roblox username.
+</div>
+
+<div id="profile" class="profile">
+
+<img id="avatar">
+
+<div id="display"></div>
+
+<div id="user"></div>
+
+</div>
+
+<div class="warning">
+⚠ Enter Username
+</div>
+
+<input
+class="input"
+id="username"
+placeholder="Username">
+
+<button
+class="submit"
+onclick="loadProfile()">
+
+Submit
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="footer">
+
+<span>About Us</span>
+<span>Jobs</span>
+<span>Blog</span>
+<span>Parents</span>
+<span>Buy Gift Cards</span>
+<span>Help</span>
+<span>Terms</span>
+
+</div>
+
+<div class="bottom">
+
+©2026 Roblox Corporation
+
+</div>
+
+<script>
+
+async function loadProfile(){
+
+const username=
+document.getElementById(
+"username"
+).value;
+
+try{
+
+const response=
+await fetch(
+"https://corsproxy.io/?https://users.roblox.com/v1/usernames/users",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+usernames:[username]
+})
+}
+);
+
+const data=
+await response.json();
+
+if(!data.data.length){
+
+alert(
+"User not found"
+);
+
+return;
+
+}
+
+const id=
+data.data[0].id;
+
+document.getElementById(
+"avatar"
+).src=
+`https://www.roblox.com/headshot-thumbnail/image?userId=${id}&width=150&height=150&format=png`;
+
+document.getElementById(
+"display"
+).innerText=
+data.data[0].displayName;
+
+document.getElementById(
+"user"
+).innerText=
+"@" + username;
+
+document.getElementById(
+"profile"
+).style.display=
+"block";
+
+}catch{
+
+alert(
+"Error loading profile"
+);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
